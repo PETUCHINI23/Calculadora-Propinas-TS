@@ -1,48 +1,44 @@
 import { useCallback } from "react";
-import type { OrderTotalsProps } from "../types";
+import type { OrderItem } from "../types";
+import { formatCurrency } from "../helpers";
 
-export default function OrderTotal({
-  order,
-  tip,
-  placeOrder,
-}: OrderTotalsProps) {
-  const subtotalAmount = useCallback(
-    () => order.reduce((total, item) => total + item.quantity * item.price, 0),
-    [order],
-  );
-  const tipAmount = useCallback(() => subtotalAmount() * tip, [tip, order]);
-  const totalAmount = useCallback(
-    () => subtotalAmount() + tipAmount(),
-    [order, tip],
-  );
-  const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(amount);
 
-  return (
-    <div className="pt-5">
-      <h2 className="mb-4 text-xl font-black text-black">Totales y Propina:</h2>
-      <div className="space-y-2 text-slate-800">
-        <p>
-          Subtotal a pagar: <span className="font-black">{formatCurrency(subtotalAmount())}</span>
-        </p>
-        <p>
-          Propina: <span className="font-black">{formatCurrency(tipAmount())}</span>
-        </p>
-        <p>
-          Total a Pagar: <span className="font-black">{formatCurrency(totalAmount())}</span>
-        </p>
-      </div>
-      <button
-        type="button"
-        onClick={() => placeOrder()}
-        className="mt-10 w-full bg-black p-3 font-bold uppercase text-white transition hover:bg-slate-800 disabled:opacity-10"
-        disabled={totalAmount() === 0}
-      >
-        Guardar orden
-      </button>
-    </div>
-  );
+type OrderTotalProps = {
+    order: OrderItem[],
+    tip: number,
+    placeOrder: () => void
+}
+
+export default function OrderTotal({ order, tip, placeOrder }: OrderTotalProps) {
+    const subtotalAmount = useCallback(() => order.reduce((total, item) => total + (item.quantity * item.price), 0), [order]);
+    const tipAmount = useCallback(() => subtotalAmount() * tip, [tip, order]);
+    const totalAmount = useCallback(() => subtotalAmount() + tipAmount(), [order, tip]);
+
+    return (
+        <>
+
+            <div className="space-y-3">
+                <h2 className=" font-black text-2xl"> Totales y proponas </h2>
+                <p>Subtotal a pagar: {" "}
+                    <span className=" font-bold"> {formatCurrency(subtotalAmount())}</span>
+                </p>
+                <p>
+                    propina: {" "}
+                    <span className=" font-bold">{formatCurrency(tipAmount())}</span>
+                </p>
+
+                <p>
+                    Total a pagar: {" "}
+                    <span className=" font-bold">{formatCurrency(totalAmount())} </span>
+                </p>
+
+            </div>
+            <button className="w-full bg-black p-3 uppercase text-white font-bold mt-10  disabled:opacity-10 "
+                disabled={totalAmount() === 0}
+
+                onClick={() => placeOrder()}>
+                Guardar Orden
+            </button>
+        </>
+    )
 }

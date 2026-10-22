@@ -1,31 +1,34 @@
-import type { OrderContentsProps } from "../types";
+
+import type { OrderItem } from "../types";
+
+type OrderContentsProps = {
+    order: OrderItem[];
+    removeItem: (id: OrderItem["id"]) => void;
+};
 
 export default function OrderContents({ order, removeItem }: OrderContentsProps) {
-  return (
-    <div>
-      <h2 className="mb-5 text-2xl font-black text-black">Consumo</h2>
-      <div className="space-y-4">
-        {order.map((item) => (
-          <div key={item.id} className="flex items-center justify-between border-b border-slate-200 pb-4 last:border-b-0">
-            <div className="min-w-0">
-              <p className="text-slate-800">
-                {item.name} - ${item.price.toFixed(2)}
-              </p>
-              <p className="font-black text-black">
-                Cantidad: {item.quantity} - ${(item.price * item.quantity).toFixed(2)}
-              </p>
+    return (
+        <div>
+            <h2 className="font-black text-4xl">Consumo</h2>
+
+            <div className="space-y-3 mt-10">
+                {order.map(item => (
+                    <div key={item.id} className="flex justify-between items-center border-t border-gray-200 py-5 last-of-type:border-b">
+                        <div>
+                            <p className="text-lg">{item.name} - ${item.price}</p>
+                            <p className="font-black">
+                                Cantidad: {item.quantity} - $
+                                {item.price * item.quantity}
+                            </p>
+                        </div>
+
+                        <button  className=" bg-red-600 h-8 w-8 rounded-full text-white font-black"
+                        onClick={() => removeItem(item.id)}>
+                            X
+                        </button>
+                    </div>
+                ))}
             </div>
-            <button
-              type="button"
-              onClick={() => removeItem(item.id)}
-              aria-label={`Quitar ${item.name} de la orden`}
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-red-600 text-sm font-black text-white transition hover:bg-red-700"
-            >
-              X
-            </button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+        </div>
+    );
 }
