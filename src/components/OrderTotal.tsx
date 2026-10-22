@@ -16,32 +16,30 @@ export default function OrderTotal({
     [order, tip],
   );
   const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat("es-MX", {
+    new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: "MXN",
+      currency: "USD",
     }).format(amount);
 
   return (
-    <div className="border-t border-slate-200 pt-5">
-      <h2 className="text-xl font-black text-slate-900">Totales y propina</h2>
-      <div className="mt-4 space-y-3">
-        <div className="flex justify-between text-sm text-slate-600">
-          <p>Subtotal</p>
-          <span>{formatCurrency(subtotalAmount())}</span>
-        </div>
-        <div className="flex justify-between text-sm text-slate-600">
-          <p>Propina</p>
-          <span>{formatCurrency(tipAmount())}</span>
-        </div>
-        <div className="flex justify-between border-t border-slate-100 pt-3 text-lg font-black text-slate-900">
-          <p>Total a pagar</p>
-          <span className="text-teal-700">{formatCurrency(totalAmount())}</span>
-        </div>
+    <div className="pt-5">
+      <h2 className="mb-4 text-xl font-black text-black">Totales y Propina:</h2>
+      <div className="space-y-2 text-slate-800">
+        <p>
+          Subtotal a pagar: <span className="font-black">{formatCurrency(subtotalAmount())}</span>
+        </p>
+        <p>
+          Propina: <span className="font-black">{formatCurrency(tipAmount())}</span>
+        </p>
+        <p>
+          Total a Pagar: <span className="font-black">{formatCurrency(totalAmount())}</span>
+        </p>
       </div>
       <button
         type="button"
         onClick={() => placeOrder()}
-        className="mt-6 w-full rounded-lg bg-teal-700 px-5 py-3 font-bold text-white transition hover:bg-teal-800 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+        className="mt-10 w-full bg-black p-3 font-bold uppercase text-white transition hover:bg-slate-800 disabled:opacity-10"
+        disabled={totalAmount() === 0}
       >
         Guardar orden
       </button>

@@ -1,3 +1,11 @@
+import React from "react"; // Aseg
+
+
+export type TipPercentageFormProps = {
+  tip: number;
+  setTip: React.Dispatch<React.SetStateAction<number>>;
+};
+
 export type MenuItem= {
  id: number;
  name: string;
